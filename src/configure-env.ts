@@ -144,6 +144,7 @@ const topLevelGroups: TopLevelGroup[] = [
         "Whisplay Hardware",
         "VPN Status Icon",
         "Display Appearance",
+        "Idle Weather Screen",
         "Device Audio",
         "Web Display Settings",
         "Web Audio Settings (requires WHISPLAY_WEB_ENABLED=true)",

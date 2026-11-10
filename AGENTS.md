@@ -69,6 +69,7 @@ whisplay-ai-chatbot/
 │   │   ├── ChatFlow.ts           # Main chat flow controller
 │   │   ├── StreamResponsor.ts    # Streaming response handler
 │   │   ├── Knowledge.ts          # RAG knowledge management
+│   │   ├── idle-weather.ts       # Idle weather screen (IDLE_WEATHER_ENABLED)
 │   │   └── chat-flow/            # State machine for chat flow
 │   ├── device/                   # Hardware abstraction
 │   │   ├── display.ts            # LCD display controller
@@ -442,6 +443,7 @@ WEB_SEARCH_INCLUDE_IMAGES=false
 1. Python rendering: `python/chatbot-ui.py` (RenderThread class)
 2. Status icons: `python/status-bar-icon/` directory
 3. Node.js controller: `src/device/display.ts`
+4. Idle weather screen: `src/core/idle-weather.ts`, notified by `ChatFlow.transitionTo()`; shows Open-Meteo weather after `IDLE_WEATHER_IDLE_MINUTES` in `sleep` and ends on any flow change
 
 ### Troubleshooting
 - **Audio issues**: Check `amixer` output, verify WM8960 driver loaded
