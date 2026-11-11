@@ -21,7 +21,7 @@ import { ChatFlowContext, FlowName } from "./chat-flow/types";
 import { playWakeupChime } from "../device/audio";
 import { stopMusicPlayback, isMusicPlaying } from "../device/music-player";
 import type { Status } from "../device/display";
-import { notifyIdleWeatherFlowChange } from "./idle-weather";
+import { notifyIdleScreenFlowChange } from "./idle-screen";
 
 dotEnv.config();
 
@@ -241,7 +241,7 @@ class ChatFlow implements ChatFlowContext {
       void this.wakeWordListener?.stop();
     }
     console.log(`[${getCurrentTimeTag()}] switch to:`, flowName);
-    notifyIdleWeatherFlowChange(flowName);
+    notifyIdleScreenFlowChange(flowName);
     this.stateMachine.transitionTo(flowName);
     if (flowName === "sleep") {
       this.wakeWordListener?.start();

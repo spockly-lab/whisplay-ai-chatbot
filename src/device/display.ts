@@ -465,7 +465,10 @@ export class WhisplayDisplay {
         return;
       }
       this.currentStatus.text = renderedText;
-      const data = JSON.stringify({ text: renderedText, brightness: 100 });
+      const data = JSON.stringify({
+        text: renderedText,
+        brightness: this.currentStatus.brightness,
+      });
       this.sendToDisplay(data);
       this.webDisplay?.updateStatus(this.currentStatus);
       this.hatPlusDisplay?.updateStatus(this.currentStatus);
@@ -547,7 +550,8 @@ export class WhisplayDisplay {
     this.currentStatus.approval_mode = approval_mode;
     
     const changedValuesObj = Object.fromEntries(changedValues);
-    changedValuesObj.brightness = 100;
+    // Always resend the current backlight level (idle screen may dim it).
+    changedValuesObj.brightness = brightness;
     if (
       isTextChanged &&
       typeof changedValuesObj.text === "string" &&

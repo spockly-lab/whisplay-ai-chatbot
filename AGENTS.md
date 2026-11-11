@@ -69,7 +69,9 @@ whisplay-ai-chatbot/
 │   │   ├── ChatFlow.ts           # Main chat flow controller
 │   │   ├── StreamResponsor.ts    # Streaming response handler
 │   │   ├── Knowledge.ts          # RAG knowledge management
-│   │   ├── idle-weather.ts       # Idle weather screen (IDLE_WEATHER_ENABLED)
+│   │   ├── idle-screen/          # Idle carousel (IDLE_SCREEN_ENABLED)
+│   │   │   ├── index.ts          # Rotation, dimming, night mode, wake press
+│   │   │   └── pages/            # One file per page (clock, weather, reminders, stats)
 │   │   └── chat-flow/            # State machine for chat flow
 │   ├── device/                   # Hardware abstraction
 │   │   ├── display.ts            # LCD display controller
@@ -443,7 +445,8 @@ WEB_SEARCH_INCLUDE_IMAGES=false
 1. Python rendering: `python/chatbot-ui.py` (RenderThread class)
 2. Status icons: `python/status-bar-icon/` directory
 3. Node.js controller: `src/device/display.ts`
-4. Idle weather screen: `src/core/idle-weather.ts`, notified by `ChatFlow.transitionTo()`; shows Open-Meteo weather after `IDLE_WEATHER_IDLE_MINUTES` in `sleep` and ends on any flow change
+4. Idle screen: `src/core/idle-screen/`, notified by `ChatFlow.transitionTo()`. After `IDLE_SCREEN_IDLE_MINUTES` in `sleep` it rotates pages every `IDLE_SCREEN_ROTATE_SECONDS` and dims to `IDLE_SCREEN_BRIGHTNESS` (night mode optional). The sleep flow's button handler calls `consumeIdleScreenWakePress()` so the first press while dimmed only brightens the screen. To add a page, implement `IdlePage` (`types.ts`) in `pages/<name>.ts` and register it in `pages/index.ts`
+5. Brightness: `display()` resends `currentStatus.brightness` with every update, so set it via `display({ brightness })` rather than assuming 100
 
 ### Troubleshooting
 - **Audio issues**: Check `amixer` output, verify WM8960 driver loaded

@@ -24,6 +24,7 @@ import { isImMode, summaryTextWithLLM } from "../../cloud-api/llm";
 import { getSystemPromptWithKnowledge } from "../Knowledge";
 import { enableRAG } from "../../cloud-api/knowledge";
 import { cameraDir } from "../../utils/dir";
+import { consumeIdleScreenWakePress } from "../idle-screen";
 import {
   clearPendingCapturedImgForChat,
   getLatestGenImg,
@@ -52,6 +53,8 @@ const isHatPlus = detectHatModel() === "hat-plus";
 export const flowStates: Record<FlowName, FlowStateHandler> = {
   sleep: (ctx: ChatFlowContext) => {
     onButtonPressed(async () => {
+      // First press on a dimmed idle screen only brightens it.
+      if (consumeIdleScreenWakePress()) return;
       resetCameraModeControl();
       // Stop any playing music when waking up
       stopMusicPlayback();
