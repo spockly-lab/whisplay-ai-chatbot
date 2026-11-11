@@ -25,6 +25,7 @@ import { getSystemPromptWithKnowledge } from "../Knowledge";
 import { enableRAG } from "../../cloud-api/knowledge";
 import { cameraDir } from "../../utils/dir";
 import { consumeIdleScreenWakePress } from "../idle-screen";
+import { consumeReminderAlertPress } from "../reminder-alerts";
 import {
   clearPendingCapturedImgForChat,
   getLatestGenImg,
@@ -53,6 +54,8 @@ const isHatPlus = detectHatModel() === "hat-plus";
 export const flowStates: Record<FlowName, FlowStateHandler> = {
   sleep: (ctx: ChatFlowContext) => {
     onButtonPressed(async () => {
+      // A press while a reminder alert is shown only dismisses it.
+      if (consumeReminderAlertPress()) return;
       // First press on a dimmed idle screen only brightens it.
       if (consumeIdleScreenWakePress()) return;
       resetCameraModeControl();

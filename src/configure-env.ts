@@ -145,6 +145,7 @@ const topLevelGroups: TopLevelGroup[] = [
         "VPN Status Icon",
         "Display Appearance",
         "Idle Screen",
+        "Reminder Alerts",
         "Device Audio",
         "Web Display Settings",
         "Web Audio Settings (requires WHISPLAY_WEB_ENABLED=true)",

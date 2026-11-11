@@ -159,11 +159,28 @@ export const consumeIdleScreenWakePress = (): boolean => {
   return true;
 };
 
+let held = false;
+let lastFlow: FlowName | null = null;
+
+/** Stops the idle screen and keeps it off (e.g. while a reminder alert is up). */
+export const holdIdleScreen = (): void => {
+  held = true;
+  stopIdleScreen();
+};
+
+/** Ends a hold; the idle countdown restarts if the flow is still sleep. */
+export const releaseIdleScreen = (): void => {
+  if (!held) return;
+  held = false;
+  if (lastFlow) notifyIdleScreenFlowChange(lastFlow);
+};
+
 /** Called by ChatFlow before every flow transition. */
 export const notifyIdleScreenFlowChange = (flowName: FlowName): void => {
+  lastFlow = flowName;
   if (!config.enabled || pages.length === 0) return;
   stopIdleScreen();
-  if (flowName !== "sleep") return;
+  if (flowName !== "sleep" || held) return;
   idleTimer = setTimeout(() => {
     idleTimer = null;
     console.log("[IdleScreen] Idle timeout reached, starting idle screen.");

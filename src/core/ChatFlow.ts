@@ -22,6 +22,7 @@ import { playWakeupChime } from "../device/audio";
 import { stopMusicPlayback, isMusicPlaying } from "../device/music-player";
 import type { Status } from "../device/display";
 import { notifyIdleScreenFlowChange } from "./idle-screen";
+import { notifyReminderAlertsFlowChange } from "./reminder-alerts";
 
 dotEnv.config();
 
@@ -247,6 +248,7 @@ class ChatFlow implements ChatFlowContext {
       this.wakeWordListener?.start();
     }
     display({ text_input_enabled: flowName === "sleep" });
+    notifyReminderAlertsFlowChange(flowName);
   };
 
   isAnswerFlow = (): boolean => {

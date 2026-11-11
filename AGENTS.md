@@ -69,6 +69,7 @@ whisplay-ai-chatbot/
 │   │   ├── ChatFlow.ts           # Main chat flow controller
 │   │   ├── StreamResponsor.ts    # Streaming response handler
 │   │   ├── Knowledge.ts          # RAG knowledge management
+│   │   ├── reminder-alerts.ts    # Proactive reminder alerts (REMINDER_ALERTS_ENABLED)
 │   │   ├── idle-screen/          # Idle carousel (IDLE_SCREEN_ENABLED)
 │   │   │   ├── index.ts          # Rotation, dimming, night mode, wake press
 │   │   │   └── pages/            # One file per page (clock, weather, reminders, stats)
@@ -446,7 +447,8 @@ WEB_SEARCH_INCLUDE_IMAGES=false
 2. Status icons: `python/status-bar-icon/` directory
 3. Node.js controller: `src/device/display.ts`
 4. Idle screen: `src/core/idle-screen/`, notified by `ChatFlow.transitionTo()`. After `IDLE_SCREEN_IDLE_MINUTES` in `sleep` it rotates pages every `IDLE_SCREEN_ROTATE_SECONDS` and dims to `IDLE_SCREEN_BRIGHTNESS` (night mode optional). The sleep flow's button handler calls `consumeIdleScreenWakePress()` so the first press while dimmed only brightens the screen. To add a page, implement `IdlePage` (`types.ts`) in `pages/<name>.ts` and register it in `pages/index.ts`
-5. Brightness: `display()` resends `currentStatus.brightness` with every update, so set it via `display({ brightness })` rather than assuming 100
+5. Reminder alerts: `src/core/reminder-alerts.ts` (REMINDER_ALERTS_ENABLED). Checks the reminders file every minute, queues due alerts until the flow is `sleep`, then shows/flashes/speaks them (speech optional, off in quiet hours). Hooks: `notifyReminderAlertsFlowChange()` at the end of `ChatFlow.transitionTo()` and `consumeReminderAlertPress()` first in the sleep button handler. Holds the idle screen via `holdIdleScreen()`/`releaseIdleScreen()`. Fired stages persist in `REMINDER_ALERT_STATE_FILE`
+6. Brightness: `display()` resends `currentStatus.brightness` with every update, so set it via `display({ brightness })` rather than assuming 100
 
 ### Troubleshooting
 - **Audio issues**: Check `amixer` output, verify WM8960 driver loaded
